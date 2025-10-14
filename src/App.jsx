@@ -1,5 +1,3 @@
-// src/App.jsx - CORRECTED VERSION
-
 import React from 'react';
 import IndiaDisasterMonitor from './components/IndiaDisasterMonitor.jsx';
 
