@@ -30,7 +30,7 @@ const mapEventData = (event, type) => {
   return null;
 };
 
-export default function IndiaDisasterMonitor() {
+export default function Monitor() {
   const [activeType, setActiveType] = useState('earthquake');
   const [filters, setFilters] = useState({ magMin: 2.5, days: 365 });
   const [events, setEvents] = useState({ data: [], loading: true, error: null });
