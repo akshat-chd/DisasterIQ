@@ -1,4 +1,4 @@
-// src/components/IndiaDisasterMonitor.jsx
+// src/components/monitor.jsx
 
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import TopBar from './TopBar';
@@ -9,7 +9,9 @@ import { useInterval } from '../hooks/useInterval';
 import { fetchEarthquakes } from '../services/usgsApi';
 import { fetchEonetEvents } from '../services/eonetApi';
 import { INDIAN_BBOX } from '../utils/constants';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+// --- ADDED IMPORTS ---
+import { fetchRainfallPrediction } from '../services/predictionApi'; // The new service for your ML backend
+import { PanelLeftClose, PanelLeftOpen, CloudHail } from 'lucide-react'; // Added CloudHail icon
 
 const isCoordInIndia = (lat, lng) => (
   lat >= INDIAN_BBOX.minlatitude && lat <= INDIAN_BBOX.maxlatitude &&
@@ -30,16 +32,22 @@ const mapEventData = (event, type) => {
   return null;
 };
 
-export default function Monitor() {
+// The function name is correctly "Monitor"
+export default function Monitor() { 
   const [activeType, setActiveType] = useState('earthquake');
   const [filters, setFilters] = useState({ magMin: 2.5, days: 365 });
   const [events, setEvents] = useState({ data: [], loading: true, error: null });
   const [selectedId, setSelectedId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   
+  // --- ADDED STATE FOR ML PREDICTION ---
+  const [isPredicting, setIsPredicting] = useState(false);
+  const [predictionValue, setPredictionValue] = useState(null);
+  
   const isInitialMount = useRef(true);
 
   const loadData = useCallback(async () => {
+    // ... (this function remains the same)
     setEvents(e => ({ ...e, loading: true, error: null }));
     try {
       let rawData = [];
@@ -64,6 +72,32 @@ export default function Monitor() {
       console.error(err);
     }
   }, [activeType, filters]);
+
+  // --- ADDED FUNCTION TO CALL YOUR PYTHON BACKEND ---
+  const handleGetForecast = async () => {
+    setIsPredicting(true);
+    setPredictionValue(null);
+    try {
+      // NOTE: These are dummy values for testing.
+      const currentConditions = {
+        temp: 29.5,
+        humidity: 85,
+        pressure: 1004,
+        wind_speed: 12,
+        rainfall_today: 2.5,
+      };
+      
+      const data = await fetchRainfallPrediction(currentConditions);
+      setPredictionValue(data.predicted_rainfall_mm);
+      alert(`Forecasted rainfall for tomorrow: ${data.predicted_rainfall_mm} mm`);
+
+    } catch (error) {
+      console.error("Failed to get prediction:", error);
+      alert("Could not fetch prediction. Is the Python backend server running?");
+    } finally {
+      setIsPredicting(false);
+    }
+  };
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -107,6 +141,12 @@ export default function Monitor() {
           <button className="panel-toggle" onClick={() => setIsPanelOpen(s => !s)}>
             {isPanelOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
           </button>
+
+          {/* --- ADDED THE FORECAST BUTTON --- */}
+          <button className="forecast-button" onClick={handleGetForecast} disabled={isPredicting}>
+            {isPredicting ? "..." : <CloudHail size={20} />}
+          </button>
+
           <MapWrapper events={events.data} selectedId={selectedId} setSelectedId={setSelectedId} />
         </div>
       </main>
