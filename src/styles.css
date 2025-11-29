@@ -341,3 +341,750 @@ html, body, #root {
     cursor: not-allowed;
     opacity: 0.7;
 }
+/*
+ * =========================================
+ * Authentication Page Styles
+ * =========================================
+ */
+
+/* This centers the form on the page */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Full screen height */
+  width: 100%;
+  background-color: #f4f7f6; /* A light, clean background */
+}
+
+/* This is the white box for the form */
+.auth-form {
+  background: #ffffff;
+  padding: 2.5rem; /* 40px */
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 400px; /* Constrains the width on larger screens */
+  text-align: center;
+}
+
+.auth-form h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+/* Style for the text inputs */
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Important for padding to work right */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Adds a nice blue glow on focus */
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/* Style for the main button */
+.auth-form button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff; /* Primary blue */
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form button[type="submit"]:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* The 'Don't have an account?' text */
+.auth-form p {
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.auth-form p a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-form p a:hover {
+  text-decoration: underline;
+}
+
+/* The error message (e.g., "Failed to log in") */
+.auth-error {
+  color: #d93025; /* Red for errors */
+  background-color: #fbeae9;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: left;
+}
+/*
+ * =========================================
+ * Top Bar User Panel Styles
+ * =========================================
+ */
+/*
+ * =========================================
+ * Top Bar Layout & NEW User Dropdown Styles
+ * =========================================
+ */
+
+/* --- Main Bar Layout --- */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0 1.5rem;
+  height: 70px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.top-bar-left,
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* --- Logo Section --- */
+.logo-section .logo-text h1 {
+  font-size: 1.25rem; /* Shrunk title */
+  white-space: nowrap;
+}
+.logo-section .logo-text p {
+  font-size: 0.8rem; /* Shrunk subtitle */
+  white-space: nowrap;
+}
+
+
+/* --- User Dropdown --- */
+.user-dropdown {
+  position: relative; /* This is the anchor for the dropdown */
+  display: inline-block;
+}
+
+/* The clickable user icon */
+.user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f1f3f4;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.user-icon:hover {
+  background-color: #e8e8e8;
+}
+
+/* The dropdown menu (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 45px; /* Position it below the icon */
+  background-color: #ffffff;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 100;
+}
+
+/* Show the dropdown on hover */
+.user-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* The new logout button style (inside the dropdown) */
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: transparent;
+  color: #d93025;
+  border: none;
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #fbeae9; /* Faint red on hover */
+}
+
+.logout-button svg {
+  color: #d93025;
+}
+/*
+ * =========================================
+ * Predictions Page Styles
+ * =========================================
+ */
+.forecast-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 70px); /* 100vh minus top bar height */
+  width: 100%;
+  background-color: #f4f7f6;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.forecast-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.forecast-icon {
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.forecast-card h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.forecast-card p {
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.forecast-button.location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.forecast-button.location:hover {
+  background-color: #0056b3;
+}
+
+.forecast-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.divider {
+  margin: 1.5rem 0;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.forecast-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.forecast-form input {
+  flex-grow: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.forecast-form button {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.forecast-form button:hover {
+  background-color: #218838;
+}
+.forecast-form button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* --- Result Box --- */
+.prediction-result {
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.prediction-result .risk-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.prediction-result .alert-message {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: inherit;
+}
+
+.prediction-result .cyclone-message {
+  border-top: 1px solid;
+  border-color: inherit;
+  opacity: 0.8;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.prediction-result .location-info {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.prediction-result.error {
+  background-color: #fbeae9;
+  color: #d93025;
+}
+
+/* Color-coded results */
+.prediction-result.risk-low {
+  background-color: #e6f7ff;
+  color: #0056b3;
+}
+.prediction-result.risk-moderate {
+  background-color: #fffbeb;
+  color: #744a00;
+}
+.prediction-result.risk-high {
+  background-color: #fff0e6;
+  color: #c53000;
+}
+.prediction-result.risk-severe {
+  background-color: #fbeae9;
+  color: #d93025;
+}
+
+/* Simple Loader */
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 1.5rem auto 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* --- Add to src/styles.css --- */
+
+/* A small vertical line to separate Page Links from Disaster Types */
+.divider-vertical {
+  width: 1px;
+  height: 24px;
+  background-color: #e0e0e0;
+  margin: 0 0.5rem;
+}
+
+/* Style for the main page links (Live Map / Predictions) */
+.nav-link {
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover {
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.nav-link.active {
+  background-color: #e6f7ff; /* Light blue background */
+  color: #007bff;
+  font-weight: 600;
+}
+
+/* Ensure the left section aligns items correctly */
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Spacing between logo, links, and disaster tabs */
+}
+
+.disaster-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* * =====================================
+ * NEW DASHBOARD STYLES (ForecastPage)
+ * =====================================
+ */
+
+.forecast-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+  background-color: #f8f9fa; /* Clean grey background */
+}
+
+.forecast-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.forecast-header h1 {
+  font-size: 2rem;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.forecast-header p {
+  color: #666;
+}
+
+/* --- Modern Search Bar --- */
+.search-bar-container {
+  display: flex;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+}
+
+.geo-button {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #007bff;
+  transition: all 0.2s;
+}
+
+.geo-button:hover {
+  background: #eef6ff;
+  border-color: #007bff;
+}
+
+.search-form {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-icon {
+  margin: 0 0.8rem;
+  color: #aaa;
+}
+
+.search-form input {
+  border: none;
+  flex-grow: 1;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-submit {
+  background-color: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search-submit:hover {
+  background-color: #333;
+}
+
+/* --- Dashboard Grid --- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Responsive grid */
+  gap: 1.5rem;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.big-stat {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.big-stat .unit {
+  font-size: 1rem;
+  color: #777;
+  font-weight: 500;
+}
+
+.sub-text {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.risk-desc {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-top: auto; /* Push to bottom */
+}
+
+.cyclone-status {
+  display: flex;
+  align-items: start;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  color: #444;
+  margin-top: auto;
+}
+
+/* --- Specific Card Styles --- */
+.location-card h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.error-banner {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+/* Tailwind-like utilities generated in React */
+.text-green-600 { color: #16a34a; }
+.bg-green-50 { background-color: #f0fdf4; }
+.border-green-200 { border-color: #bbf7d0; }
+
+.text-yellow-600 { color: #ca8a04; }
+.bg-yellow-50 { background-color: #fefce8; }
+.border-yellow-200 { border-color: #fef08a; }
+
+.text-orange-600 { color: #ea580c; }
+.bg-orange-50 { background-color: #fff7ed; }
+.border-orange-200 { border-color: #fed7aa; }
+
+.text-red-600 { color: #dc2626; }
+.bg-red-50 { background-color: #fef2f2; }
+.border-red-200 { border-color: #fecaca; }
+/* ===== Login Page Improved UI ===== */
+
+.auth-container {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #f5f9ff, #e9f1ff); /* light blue-white gradient */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 40px; /* LESS space so card moves up */
+}
+
+
+.auth-form {
+  width: 380px;
+  background: #ffffff;
+  padding: 35px 30px;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15);
+  text-align: center;
+   margin-top: -10px; 
+  
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.10);
+
+
+}
+
+
+.auth-form h1,
+.auth-form h2 {
+  margin: 0;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #1e3c72;
+}
+
+/* Main Heading: Disaster IQ */
+.auth-form h1 {
+  font-size: 32px;
+}
+
+/* Subheading: Login */
+.auth-form h2 {
+  font-size: 22px;
+  color: #333;
+  margin-top: 5px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #fafafa;
+  transition: 0.2s ease;
+}
+
+.auth-form input:focus {
+  background: #fff;
+  border-color: #1e3c72;
+  box-shadow: 0 0 5px rgba(30, 60, 114, 0.2);
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 18px;
+  background: #007bff;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.auth-form button:hover {
+  background: #005fcc;
+}
+
+
+.auth-error {
+  color: #d9534f;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.auth-form p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.auth-form a {
+  color: #1e3c72;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-form a:hover {
+  text-decoration: underline;
+}
+/* Main banner heading */
+.disaster-title {
+  font-size: 40px;
+  font-weight: 900;
+  color: #1e3c72;
+  margin-bottom: 40px;
+}

@@ -1,4 +1,4 @@
-// src/components/monitor.jsx
+// src/components/Monitor.jsx
 
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import TopBar from './TopBar';
@@ -9,9 +9,12 @@ import { useInterval } from '../hooks/useInterval';
 import { fetchEarthquakes } from '../services/usgsApi';
 import { fetchEonetEvents } from '../services/eonetApi';
 import { INDIAN_BBOX } from '../utils/constants';
-// --- ADDED IMPORTS ---
-import { fetchRainfallPrediction } from '../services/predictionApi'; // The new service for your ML backend
-import { PanelLeftClose, PanelLeftOpen, CloudHail } from 'lucide-react'; // Added CloudHail icon
+
+// --- CORRECT IMPORTS ---
+import { getPrediction } from '../services/api';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { PanelLeftClose, PanelLeftOpen, CloudHail } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const isCoordInIndia = (lat, lng) => (
   lat >= INDIAN_BBOX.minlatitude && lat <= INDIAN_BBOX.maxlatitude &&
@@ -32,7 +35,6 @@ const mapEventData = (event, type) => {
   return null;
 };
 
-// The function name is correctly "Monitor"
 export default function Monitor() { 
   const [activeType, setActiveType] = useState('earthquake');
   const [filters, setFilters] = useState({ magMin: 2.5, days: 365 });
@@ -40,14 +42,16 @@ export default function Monitor() {
   const [selectedId, setSelectedId] = useState(null);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   
-  // --- ADDED STATE FOR ML PREDICTION ---
   const [isPredicting, setIsPredicting] = useState(false);
-  const [predictionValue, setPredictionValue] = useState(null);
+  const [predictionAlert, setPredictionAlert] = useState(null); 
   
   const isInitialMount = useRef(true);
 
+  // --- CORRECT: Auth and Navigation logic ---
+  const { logout, user } = useAuth(); // Get both 'logout' and 'user'
+  const navigate = useNavigate();
+
   const loadData = useCallback(async () => {
-    // ... (this function remains the same)
     setEvents(e => ({ ...e, loading: true, error: null }));
     try {
       let rawData = [];
@@ -56,8 +60,8 @@ export default function Monitor() {
         case 'earthquake': rawData = await fetchEarthquakes(filters); break;
         case 'cyclone': rawData = await fetchEonetEvents({ category: 'severeStorms', days: filters.days }); break;
         case 'flood': rawData = await fetchEonetEvents({ category: 'floods', days: filters.days }); break;
-        case 'volcano': isImplemented = false; break;
-        default: throw new Error(`Unknown type: ${activeType}`);
+        // 'volcano' is removed from constants.js, so this case won't be hit
+        default: isImplemented = false; // Set to false for any other type
       }
       
       const mappedData = rawData.map(event => mapEventData(event, activeType)).filter(Boolean);
@@ -72,31 +76,52 @@ export default function Monitor() {
       console.error(err);
     }
   }, [activeType, filters]);
+  
+  // --- CORRECT: Logout Handler ---
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login'); // Navigate to login after logout
+  };
 
-  // --- ADDED FUNCTION TO CALL YOUR PYTHON BACKEND ---
-  const handleGetForecast = async () => {
+  // --- UPDATED FORECAST FUNCTION ---
+  const handleGetForecast = () => {
     setIsPredicting(true);
-    setPredictionValue(null);
-    try {
-      // NOTE: These are dummy values for testing.
-      const currentConditions = {
-        temp: 29.5,
-        humidity: 85,
-        pressure: 1004,
-        wind_speed: 12,
-        rainfall_today: 2.5,
-      };
-      
-      const data = await fetchRainfallPrediction(currentConditions);
-      setPredictionValue(data.predicted_rainfall_mm);
-      alert(`Forecasted rainfall for tomorrow: ${data.predicted_rainfall_mm} mm`);
+    setPredictionAlert(null);
 
-    } catch (error) {
-      console.error("Failed to get prediction:", error);
-      alert("Could not fetch prediction. Is the Python backend server running?");
-    } finally {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
       setIsPredicting(false);
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        
+        try {
+          const response = await getPrediction(latitude, longitude);
+          const data = response.data;
+          setPredictionAlert(data);
+          alert(data.alert_message);
+          
+        } catch (error) {
+          console.error("Failed to get prediction:", error);
+          let errorMsg = "Could not fetch prediction. Is the Python backend server running?";
+          if (error.response?.status === 401) {
+             errorMsg = "Your session expired. Please log in again.";
+             handleLogout(); // Log them out if session is invalid
+          }
+          alert(errorMsg);
+        } finally {
+          setIsPredicting(false);
+        }
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        alert("Unable to retrieve your location. Please enable location services.");
+        setIsPredicting(false);
+      }
+    );
   };
 
   useEffect(() => {
@@ -129,12 +154,15 @@ export default function Monitor() {
         setActiveType={setActiveType}
         filters={filters}
         setFilters={setFilters}
+        user={user} // <-- CORRECT: Pass user
+        onLogout={handleLogout} // <-- CORRECT: Pass logout handler
       />
+
       <main className="main-content">
         <EventPanel
           isOpen={isPanelOpen}
           events={events}
-          selectedEvent={selectedEvent}
+          selectedEvent={selectedEvent} 
           setSelectedId={setSelectedId}
         />
         <div className="map-area">
@@ -142,7 +170,6 @@ export default function Monitor() {
             {isPanelOpen ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
           </button>
 
-          {/* --- ADDED THE FORECAST BUTTON --- */}
           <button className="forecast-button" onClick={handleGetForecast} disabled={isPredicting}>
             {isPredicting ? "..." : <CloudHail size={20} />}
           </button>

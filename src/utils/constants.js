@@ -13,7 +13,7 @@ export const DISASTER_TYPES = [
   { key: 'earthquake', label: 'Earthquakes' },
   { key: 'cyclone', label: 'Cyclones' },
   { key: 'flood', label: 'Floods' },
-  { key: 'volcano', label: 'Volcanoes' },
+  
 ];
 
 export const USGS_API_URL = 'https://earthquake.usgs.gov/fdsnws/event/1/query';
